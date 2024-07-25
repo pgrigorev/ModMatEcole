@@ -1,0 +1,7 @@
+name: modmat
+channels:
+ - defaults
+dependencies:
+ - pip
+ - pip:
+   - -r requirements.txt

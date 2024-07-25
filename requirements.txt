@@ -1,0 +1,10 @@
+matplotlib
+ase
+numpy < 2.0.0 # current releasae of matscipy is not compatible with numpy 2.0, it is fixed in dev version
+matscipy
+scipy
+nglview
+networkx
+pandas
+bokeh == 3.3.4 # they changed the API for circle glyph in 3.4.0 and it affects graph plotting
+-e git+https://github.com/arn-all/neighbors-maps.git#egg=neighbors_map
