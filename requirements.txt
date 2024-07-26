@@ -1,10 +1,12 @@
 matplotlib
 ase
 numpy < 2.0.0 # current releasae of matscipy is not compatible with numpy 2.0, it is fixed in dev version
+jupyter
 matscipy
 scipy
-nglview
+nglview==3.0.8 # this version works with VSCode and for html export
 networkx
 pandas
 bokeh == 3.3.4 # they changed the API for circle glyph in 3.4.0 and it affects graph plotting
+jupyter_bokeh
 -e git+https://github.com/arn-all/neighbors-maps.git#egg=neighbors_map
