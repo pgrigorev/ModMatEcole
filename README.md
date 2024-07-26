@@ -3,4 +3,4 @@ Binder link seems to be working, but does get stuck sometimes. We can make Googl
 
 Here the sketch from out discussion in Toulouse, I will add content to the first notebook next week.
 
-![](img/plan.jpg)
+![](tutorials/img/plan.jpg)
