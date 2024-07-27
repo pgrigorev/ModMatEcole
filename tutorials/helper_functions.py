@@ -4,11 +4,14 @@ import networkx as nx
 
 from matscipy.neighbours import neighbour_list
 
+from nglview import show_ase, ASEStructure
+
 from bokeh.plotting import figure, from_networkx, show, save, output_file
 from bokeh.palettes import Spectral4
 from bokeh.models import Circle, NodesAndLinkedEdges, MultiLine, LinearColorMapper, CustomJS, HoverTool, TapTool
 from bokeh.palettes import Viridis256
 from bokeh.layouts import row
+
 
 def get_cutoff(atoms, n_neightbours, cutoff=10.):
     """
@@ -20,6 +23,54 @@ def get_cutoff(atoms, n_neightbours, cutoff=10.):
     first_atom_d = d[i == 0]
     first_atom_d.sort()
     return first_atom_d[n_neightbours]
+
+
+def show_structure(structure, name=''):
+    # create an empty canvas
+    view = show_ase(structure, default_representation=False)
+    view.remove_component(view[0])
+
+    # add new component to visualise
+    component  = view.add_component(ASEStructure(structure), default_representation=False, name=name)
+    
+    # set up the vew as just atomic spheres with unit cell
+    scale=0.5
+    component.add_spacefill()
+    component.update_spacefill(radiusType='covalent',
+                            radiusScale=scale)
+    component.add_unitcell()
+
+    view.camera = 'orthographic'
+    view.parameters = {"clipDist": 0}   
+
+    tooltip_js = """
+                this.stage.mouseControls.add('hoverPick', (stage, pickingProxy) => {
+                    let tooltip = this.stage.tooltip;
+                    if(pickingProxy && pickingProxy.atom && !pickingProxy.bond){
+                        let atom = pickingProxy.atom;
+                        if (atom.structure.name.length > 0){
+                            tooltip.innerText = atom.atomname + " atom index " + atom.index + ": " + atom.structure.name;
+                        } else {
+                            tooltip.innerText = atom.atomname + " atom index " + atom.index;
+                        }
+                    } else if (pickingProxy && pickingProxy.bond){
+                        let bond = pickingProxy.bond;
+                        if (bond.structure.name.length > 0){
+                        tooltip.innerText = bond.atom1.atomname + "-" + bond.atom2.atomname + " bond: " + bond.structure.name;
+                        } else {
+                            tooltip.innerText = bond.atom1.atomname + "-" + bond.atom2.atomname + " bond";
+                        }
+                    } else if (pickingProxy && pickingProxy.unitcell){
+                        tooltip.innerText = "Unit cell";
+                    } else if (pickingProxy && pickingProxy.distance){
+                        let distance = pickingProxy.distance;
+                        tooltip.innerText = "Distance: " + distance.atom1.atomname + distance.atom1.index + "-" + distance.atom2.atomname + distance.atom2.index;
+                    } 
+                });
+                """
+    view._js(tooltip_js)
+    return view
+
 
 def interactive_neighbour_map(structure, 
                               target_atom_index=0,
