@@ -10,3 +10,6 @@ pandas
 bokeh == 3.3.4 # they changed the API for circle glyph in 3.4.0 and it affects graph plotting
 jupyter_bokeh
 -e git+https://github.com/arn-all/neighbors-maps.git#egg=neighbors_map
+scikit-learn
+plotly
+tqdm
